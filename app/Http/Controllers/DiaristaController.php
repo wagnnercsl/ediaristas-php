@@ -6,9 +6,18 @@ use App\Models\Diarista;
 use Illuminate\Http\Request;
 use App\classes\Helpers;
 use App\classes\Helpers\Helper;
+use App\Http\Requests\DiaristaRequest;
+use App\Services\ViaCEP;
 
 class DiaristaController extends Controller
 {
+    //protected ViaCEP $viaCEP;
+
+    public function __construct(
+        protected ViaCEP $viaCEP
+    ) {
+    }
+
     public function index()
     {
         $diaristas = Diarista::get();
@@ -25,7 +34,7 @@ class DiaristaController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(DiaristaRequest $request)
     {
         $dados = $request->except('_token');
         $dados['foto_usuario'] = $request->foto_usuario->store('public');
@@ -33,6 +42,7 @@ class DiaristaController extends Controller
         $dados['cpf'] = Helper::limpaMascara($dados['cpf']);
         $dados['cep'] = Helper::limpaMascara($dados['cep']);
         $dados['telefone'] = Helper::limpaMascara($dados['telefone']);
+        $dados['codigo_ibge'] = $this->viaCEP->buscar($dados['cep'])['ibge'];
         
         Diarista::create($dados);
         
@@ -48,11 +58,16 @@ class DiaristaController extends Controller
         ]);
     }
 
-    public function update(int $id, Request $request)
+    public function update(int $id, DiaristaRequest $request)
     {
         $diarista = Diarista::findOrFail($id);
 
         $dados = $request->except('_token', '_method');
+
+        $dados['cpf'] = Helper::limpaMascara($dados['cpf']);
+        $dados['cep'] = Helper::limpaMascara($dados['cep']);
+        $dados['telefone'] = Helper::limpaMascara($dados['telefone']);
+        $dados['codigo_ibge'] = $this->viaCEP->buscar($dados['cep'])['ibge'];
 
         if($request->hasFile('foto_usuario')) {
             $dados['foto_usuario'] = $request->foto_usuario->store('public');

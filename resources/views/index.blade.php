@@ -1,3 +1,6 @@
+<?php
+    use \Clemdesign\PhpMask\Mask;
+?>
 @extends('app')
 
 @section('titulo', 'Página Inicial')
@@ -11,15 +14,17 @@
             <th scope="col">Id</th>
             <th scope="col">Nome</th>
             <th scope="col">Telefone</th>
+            <th scope="col">CEP</th>
             <th scope="col">Ações</th>
         </tr>
     </thead>
     <tbody>
         @forelse ($diaristas as $diarista)
         <tr>
-            <th scope="row">1</th>
+            <th scope="row"></th>
             <td>{{ $diarista->nome_completo }}</td>
-            <td>{{ $diarista->telefone }}</td>
+            <td>{{ Mask::apply($diarista->telefone, '(00) 00000-0000') }}</td>
+            <td>{{ Mask::apply($diarista->cep, '00000-000') }}</td>
             <td>
                 <a class="btn btn-primary" href="{{ route('diaristas.edit', $diarista) }}">Atualizar</a>
                 <a class="btn btn-danger" href="{{ route('diaristas.destroy', $diarista )}}" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>

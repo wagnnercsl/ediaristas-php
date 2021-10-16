@@ -20,13 +20,13 @@ class ViaCEP {
         if($resposta->failed()) {
             return false;
         }
-
+        
         $dados = $resposta->json();
 
-        if($resposta['erro'] && $resposta['erro'] === true) {
+        if(isset($dados['erro']) && $dados['erro'] === true) {
             return false;
         }
-
+        
         return $dados;
     }
 }

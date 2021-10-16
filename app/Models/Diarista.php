@@ -21,11 +21,35 @@ class Diarista extends Model
      *
      * @var array
      */
-    protected $visible = ['nome_completo', 'cidade', 'foto_usuario'];
+    protected $visible = ['nome_completo', 'cidade', 'foto_usuario', 'reputacao'];
 
+    /**
+     * Adiciona campos na serialização(não existe no banco)
+     *
+     * @var array
+     */
+    protected $appends = ['reputacao'];
+
+    /**
+     * Monta a URL da imagem
+     *
+     * @param string $valor
+     * @return void
+     */
     public function getFotoUsuarioAttribute(string $valor)
     {
         return config('app.url') . '/' . $valor;
+    }
+
+    /**
+     * Retorna a reputação randômica
+     *
+     * @param [type] $valor
+     * @return void
+     */
+    public function getReputacaoAttribute($valor)
+    {
+        return mt_rand(1, 5);
     }
     
     /**

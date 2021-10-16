@@ -19,12 +19,12 @@ class BuscaDiaristaCep extends Controller
         $endereco = $viaCEP->buscar($request->cep);
 
         if(!$endereco) {
-            return response()->json(['erro' => 'CEP inválido'], 400);
+            return response()->json(['erro' => 'CEP invÃ¡lido'], 400);
         }
 
         return [
-            'diaristas' => Diarista::buscaPorCodigoIbge($endereco),
-            'quantidade_diarista' => Diarista::quantidadePorCodigoIbge($endereco)
+            'diaristas' => Diarista::buscaPorCodigoIbge($endereco['ibge']),
+            'quantidade_diaristas' => Diarista::quantidadePorCodigoIbge($endereco['ibge'])
         ];
     }
 }
